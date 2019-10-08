@@ -3,6 +3,7 @@ package br.com.financask.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import br.com.financask.R
+import br.com.financask.model.TipoTransacao
 import br.com.financask.model.Transacao
 import br.com.financask.ui.adapter.ListaTransacoesAdapter
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
@@ -16,8 +17,8 @@ class ListaTransacoesActivity: AppCompatActivity() {
         setContentView(R.layout.activity_lista_transacoes)
 
         val listaTransacoes = listOf(
-            Transacao(BigDecimal(20.5), "Comida", Calendar.getInstance()),
-            Transacao(BigDecimal(100), "Economia", Calendar.getInstance())
+            Transacao(BigDecimal(20.5), "Comida", TipoTransacao.DESPESA),
+            Transacao(BigDecimal(100), "Economia", TipoTransacao.RECEITA)
         )
 
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(listaTransacoes, this)
