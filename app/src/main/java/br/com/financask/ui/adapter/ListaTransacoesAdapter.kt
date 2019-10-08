@@ -6,20 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import br.com.financask.R
+import br.com.financask.model.Transacao
+import kotlinx.android.synthetic.main.transacao_item.view.*
 
 class ListaTransacoesAdapter(
-    private val transacoes: List<String>,
+    private val transacoes: List<Transacao>,
     private val context: Context
     ): BaseAdapter() {
 
     override fun getView(posicao: Int, view: View?, parent: ViewGroup?): View {
-        val view = LayoutInflater.from(context)
+        val viewCriada = LayoutInflater.from(context)
             .inflate(R.layout.transacao_item, parent, false)
 
-        return view
+        val transacao = this.getItem(posicao)
+
+        viewCriada.transacao_valor.text = transacao.valor.toString()
+        return viewCriada
     }
 
-    override fun getItem(posicao: Int): String {
+    override fun getItem(posicao: Int): Transacao {
         return transacoes[posicao]
     }
 
