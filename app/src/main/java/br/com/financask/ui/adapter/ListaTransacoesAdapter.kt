@@ -8,6 +8,7 @@ import android.widget.BaseAdapter
 import androidx.core.content.ContextCompat
 import br.com.financask.R
 import br.com.financask.extension.formataParaBrasileiro
+import br.com.financask.extension.limitaEmAte
 import br.com.financask.model.Transacao
 import kotlinx.android.synthetic.main.transacao_item.view.*
 
@@ -16,6 +17,8 @@ class ListaTransacoesAdapter(
     private val context: Context
     ): BaseAdapter() {
 
+    private val limiteTextoCategoria = 14
+
     override fun getView(posicao: Int, view: View?, parent: ViewGroup?): View {
         val viewCriada = LayoutInflater.from(context)
             .inflate(R.layout.transacao_item, parent, false)
@@ -23,7 +26,7 @@ class ListaTransacoesAdapter(
         val transacao = this.getItem(posicao)
 
         viewCriada.transacao_valor.text = transacao.valor.formataParaBrasileiro()
-        viewCriada.transacao_categoria.text = transacao.categoria
+        viewCriada.transacao_categoria.text = transacao.categoria.limitaEmAte(limiteTextoCategoria)
         viewCriada.transacao_data.text = transacao.data.formataParaBrasileiro()
         viewCriada.transacao_valor.setTextColor(this.obterTransacaoValorTextColor(transacao))
         viewCriada.transacao_icone.setBackgroundResource(this.obterIconeTransacao(transacao))
