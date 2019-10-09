@@ -28,7 +28,7 @@ class ListaTransacoesActivity: AppCompatActivity() {
     }
 
     private fun configuraResumo(listaTransacoes: List<Transacao>) {
-        val resumoView = ResumoView(window.decorView, listaTransacoes)
+        val resumoView = ResumoView(this, window.decorView, listaTransacoes)
 
         resumoView.adicionaReceita()
         resumoView.adicionaDespesa()
