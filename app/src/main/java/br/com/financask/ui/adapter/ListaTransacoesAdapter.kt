@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import androidx.core.content.ContextCompat
 import br.com.financask.R
 import br.com.financask.extension.formataParaBrasileiro
 import br.com.financask.model.Transacao
@@ -24,8 +25,26 @@ class ListaTransacoesAdapter(
         viewCriada.transacao_valor.text = transacao.valor.toString()
         viewCriada.transacao_categoria.text = transacao.categoria
         viewCriada.transacao_data.text = transacao.data.formataParaBrasileiro()
+        viewCriada.transacao_valor.setTextColor(this.obterTransacaoValorTextColor(transacao))
+        viewCriada.transacao_icone.setBackgroundResource(this.obterIconeTransacao(transacao))
 
         return viewCriada
+    }
+
+    private fun obterIconeTransacao(transacao: Transacao): Int {
+        return if (transacao.isDespesa()) {
+            R.drawable.icone_transacao_item_despesa
+        } else {
+            R.drawable.icone_transacao_item_receita
+        }
+    }
+
+    private fun obterTransacaoValorTextColor(transacao: Transacao): Int {
+        return if (transacao.isDespesa()) {
+            ContextCompat.getColor(context, R.color.despesa)
+        } else {
+            ContextCompat.getColor(context, R.color.receita)
+        }
     }
 
     override fun getItem(posicao: Int): Transacao {
