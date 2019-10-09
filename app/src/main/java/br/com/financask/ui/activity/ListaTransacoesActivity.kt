@@ -1,6 +1,9 @@
 package br.com.financask.ui.activity
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.financask.R
 import br.com.financask.model.TipoTransacao
@@ -23,7 +26,21 @@ class ListaTransacoesActivity: AppCompatActivity() {
         )
 
         this.configuraResumo(listaTransacoes)
+        this.configuraLista(listaTransacoes)
 
+        val view = window.decorView
+        val viewCriada = LayoutInflater.from(this)
+            .inflate(R.layout.form_transacao, view as ViewGroup, false)
+
+        lista_transacoes_adiciona_receita.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.adiciona_receita)
+                .setView(viewCriada)
+                .show()
+        }
+    }
+
+    private fun configuraLista(listaTransacoes: List<Transacao>) {
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(listaTransacoes, this)
     }
 
