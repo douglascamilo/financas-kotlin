@@ -7,11 +7,19 @@ class Resumo(
     ) {
 
     fun receita(): BigDecimal {
-        return BigDecimal.ZERO
+        val totalReceitas = transacoes
+            .filter { item -> item.tipo.isReceita() }
+            .sumByDouble { item -> item.valor.toDouble() }
+
+        return BigDecimal(totalReceitas)
     }
 
     fun despesa(): BigDecimal {
-        return BigDecimal.ZERO
+        val totalDespesas = transacoes
+            .filter { item -> item.tipo.isDespesa() }
+            .sumByDouble { item -> item.valor.toDouble() }
+
+        return BigDecimal(totalDespesas)
     }
 
     fun total(): BigDecimal {
