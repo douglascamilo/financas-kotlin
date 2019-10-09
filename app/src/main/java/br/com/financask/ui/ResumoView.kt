@@ -27,7 +27,7 @@ class ResumoView(
     }
 
     private fun adicionaReceita() {
-        val totalReceita = resumo.receita()
+        val totalReceita = resumo.receita
         with(view.resumo_card_receita) {
             text = totalReceita.formataParaBrasileiro()
             setTextColor(corReceita)
@@ -35,7 +35,7 @@ class ResumoView(
     }
 
     private fun adicionaDespesa() {
-        val totalDespesa = resumo.despesa()
+        val totalDespesa = resumo.despesa
         with(view.resumo_card_despesa) {
             text = totalDespesa.formataParaBrasileiro()
             setTextColor(corDespesa)
@@ -43,7 +43,7 @@ class ResumoView(
     }
 
     private fun total() {
-        val total = resumo.total()
+        val total = resumo.total
         with(view.resumo_card_total) {
             text = total.formataParaBrasileiro()
             setTextColor(obterCorTotal(total))

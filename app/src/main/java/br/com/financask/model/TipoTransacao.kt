@@ -10,12 +10,4 @@ enum class TipoTransacao(
     RECEITA(R.color.receita, R.drawable.icone_transacao_item_receita),
     DESPESA(R.color.despesa, R.drawable.icone_transacao_item_despesa),
     ;
-
-    fun isDespesa(): Boolean {
-        return this == DESPESA
-    }
-
-    fun isReceita(): Boolean {
-        return this == RECEITA
-    }
 }

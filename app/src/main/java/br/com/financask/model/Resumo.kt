@@ -6,23 +6,17 @@ class Resumo(
     private val transacoes: List<Transacao>
     ) {
 
-    fun receita(): BigDecimal {
-        val totalReceitas = transacoes
-            .filter { item -> item.tipo.isReceita() }
-            .sumByDouble { item -> item.valor.toDouble() }
+    val receita get() = this.somaPor(TipoTransacao.RECEITA)
 
-        return BigDecimal(totalReceitas)
-    }
+    val despesa get() = this.somaPor(TipoTransacao.DESPESA)
 
-    fun despesa(): BigDecimal {
-        val totalDespesas = transacoes
-            .filter { item -> item.tipo.isDespesa() }
-            .sumByDouble { item -> item.valor.toDouble() }
+    val total get() = this.receita.subtract(this.despesa)
 
-        return BigDecimal(totalDespesas)
-    }
+    private fun somaPor(tipo: TipoTransacao): BigDecimal {
+        val valorRetorno = transacoes
+            .filter { it.tipo == tipo }
+            .sumByDouble { it.valor.toDouble() }
 
-    fun total(): BigDecimal {
-        return this.receita().subtract(this.despesa())
+        return BigDecimal(valorRetorno)
     }
 }
