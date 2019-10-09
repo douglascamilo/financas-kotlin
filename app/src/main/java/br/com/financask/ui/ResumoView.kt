@@ -11,38 +11,44 @@ import kotlinx.android.synthetic.main.resumo_card.view.*
 import java.math.BigDecimal
 
 class ResumoView(
-    private val context: Context,
+    context: Context,
     private val view: View,
     transacoes: List<Transacao>
 ) {
 
     private val resumo = Resumo(transacoes)
+    private val corReceita = ContextCompat.getColor(context, R.color.receita)
+    private val corDespesa = ContextCompat.getColor(context, R.color.despesa)
 
     fun adicionaReceita() {
         val totalReceita = resumo.receita()
-        view.resumo_card_receita.text = totalReceita.formataParaBrasileiro()
-        view.resumo_card_receita.setTextColor(this.obterCorPor(R.color.receita))
+        with(view.resumo_card_receita) {
+            text = totalReceita.formataParaBrasileiro()
+            setTextColor(corReceita)
+        }
     }
 
     fun adicionaDespesa() {
         val totalDespesa = resumo.despesa()
-        view.resumo_card_despesa.text = totalDespesa.formataParaBrasileiro()
-        view.resumo_card_despesa.setTextColor(this.obterCorPor(R.color.despesa))
+        with(view.resumo_card_despesa) {
+            text = totalDespesa.formataParaBrasileiro()
+            setTextColor(corDespesa)
+        }
     }
 
     fun total() {
         val total = resumo.total()
-        view.resumo_card_total.text = total.formataParaBrasileiro()
-        view.resumo_card_total.setTextColor(this.obterCorTotal(total))
+        with(view.resumo_card_total) {
+            text = total.formataParaBrasileiro()
+            setTextColor(obterCorTotal(total))
+        }
     }
 
     private fun obterCorTotal(total: BigDecimal): Int {
-        if (total.compareTo(BigDecimal.ZERO) < 0) {
-            return this.obterCorPor(R.color.despesa)
+        if (total < BigDecimal.ZERO) {
+            return corDespesa
         }
 
-        return this.obterCorPor(R.color.receita)
+        return corReceita
     }
-
-    private fun obterCorPor(idResourceBundle: Int) = ContextCompat.getColor(context, idResourceBundle)
 }
