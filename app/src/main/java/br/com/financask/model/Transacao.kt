@@ -8,8 +8,4 @@ class Transacao(
     val categoria: String = "Indefinida",
     val tipo: TipoTransacao,
     val data: Calendar = Calendar.getInstance()
-) {
-    fun isDespesa(): Boolean {
-        return tipo.isDespesa()
-    }
-}
+)

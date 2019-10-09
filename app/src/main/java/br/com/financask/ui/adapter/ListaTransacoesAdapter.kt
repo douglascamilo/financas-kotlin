@@ -26,28 +26,12 @@ class ListaTransacoesAdapter(
         val transacao = this.getItem(posicao)
 
         viewCriada.transacao_valor.text = transacao.valor.formataParaBrasileiro()
+        viewCriada.transacao_valor.setTextColor(ContextCompat.getColor(context, transacao.tipo.cor))
         viewCriada.transacao_categoria.text = transacao.categoria.limitaEmAte(limiteTextoCategoria)
         viewCriada.transacao_data.text = transacao.data.formataParaBrasileiro()
-        viewCriada.transacao_valor.setTextColor(this.obterTransacaoValorTextColor(transacao))
-        viewCriada.transacao_icone.setBackgroundResource(this.obterIconeTransacao(transacao))
+        viewCriada.transacao_icone.setBackgroundResource(transacao.tipo.icone)
 
         return viewCriada
-    }
-
-    private fun obterIconeTransacao(transacao: Transacao): Int {
-        return if (transacao.isDespesa()) {
-            R.drawable.icone_transacao_item_despesa
-        } else {
-            R.drawable.icone_transacao_item_receita
-        }
-    }
-
-    private fun obterTransacaoValorTextColor(transacao: Transacao): Int {
-        return if (transacao.isDespesa()) {
-            ContextCompat.getColor(context, R.color.despesa)
-        } else {
-            ContextCompat.getColor(context, R.color.receita)
-        }
     }
 
     override fun getItem(posicao: Int): Transacao {
