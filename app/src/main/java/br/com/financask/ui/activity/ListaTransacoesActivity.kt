@@ -22,19 +22,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ListaTransacoesActivity: AppCompatActivity() {
+    private val listaTransacoes: MutableList<Transacao> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity_lista_transacoes)
 
-        val listaTransacoes = listOf(
-            Transacao(BigDecimal("20.5"), "Comida", TipoTransacao.DESPESA),
-            Transacao(BigDecimal("100"), "Economia", TipoTransacao.RECEITA),
-            Transacao(BigDecimal("51.79"), "Almoco de final de semana", TipoTransacao.RECEITA)
-        )
-
-        this.configuraResumo(listaTransacoes)
-        this.configuraLista(listaTransacoes)
+        this.configuraResumo()
+        this.configuraLista()
 
         val view = window.decorView
         val viewCriada = LayoutInflater.from(this)
@@ -74,18 +69,26 @@ class ListaTransacoesActivity: AppCompatActivity() {
                     val dataTransacao = Calendar.getInstance()
                     dataTransacao.time = SimpleDateFormat("dd/MM/yyyy").parse(data)
 
-                    Transacao(BigDecimal(valor), categoria, TipoTransacao.RECEITA, dataTransacao)
+                    val transacao = Transacao(BigDecimal(valor), categoria, TipoTransacao.RECEITA, dataTransacao)
+                    atualizaTransacoes(transacao)
+                    lista_transacoes_adiciona_menu.close(true)
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
         }
     }
 
-    private fun configuraLista(listaTransacoes: List<Transacao>) {
+    private fun atualizaTransacoes(transacao: Transacao) {
+        listaTransacoes.add(transacao)
+        configuraLista()
+        configuraResumo()
+    }
+
+    private fun configuraLista() {
         lista_transacoes_listview.adapter = ListaTransacoesAdapter(listaTransacoes, this)
     }
 
-    private fun configuraResumo(listaTransacoes: List<Transacao>) {
+    private fun configuraResumo() {
         ResumoView(this, window.decorView, listaTransacoes)
             .atualiza()
     }
