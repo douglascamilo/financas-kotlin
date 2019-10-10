@@ -1,6 +1,7 @@
 package br.com.financask.ui.activity
 
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 import kotlinx.android.synthetic.main.activity_lista_transacoes.view.*
 import kotlinx.android.synthetic.main.form_transacao.view.*
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ListaTransacoesActivity: AppCompatActivity() {
@@ -64,7 +66,16 @@ class ListaTransacoesActivity: AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setTitle(R.string.adiciona_receita)
                 .setView(viewCriada)
-                .setPositiveButton("Adicionar", null)
+                .setPositiveButton("Adicionar") { _, _ ->
+                    val valor = viewCriada.form_transacao_valor.text.toString()
+                    val data = viewCriada.form_transacao_data.text.toString()
+                    val categoria = viewCriada.form_transacao_categoria.selectedItem.toString()
+
+                    val dataTransacao = Calendar.getInstance()
+                    dataTransacao.time = SimpleDateFormat("dd/MM/yyyy").parse(data)
+
+                    Transacao(BigDecimal(valor), categoria, TipoTransacao.RECEITA, dataTransacao)
+                }
                 .setNegativeButton("Cancelar", null)
                 .show()
         }
