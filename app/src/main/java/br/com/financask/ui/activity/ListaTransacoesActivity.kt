@@ -19,6 +19,9 @@ class ListaTransacoesActivity: AppCompatActivity() {
     private val viewDaActivity by lazy {
         window.decorView
     }
+    private val viewGroupDaActivity by lazy {
+        viewDaActivity as ViewGroup
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +55,7 @@ class ListaTransacoesActivity: AppCompatActivity() {
     }
 
     private fun chamaAdicionaTransacaoDialog(tipoTransacao: TipoTransacao) {
-        AdicionaTransacaoDialog(this, viewDaActivity as ViewGroup)
+        AdicionaTransacaoDialog(this, viewGroupDaActivity)
             .mostrar(tipoTransacao, object: TransacaoDelegate {
 
                 override fun delegate(transacao: Transacao) {
@@ -65,7 +68,7 @@ class ListaTransacoesActivity: AppCompatActivity() {
     private fun chamaAlteraTransacaoDialog(posicao: Int) {
         val transacaoSelecionada = listaTransacoes[posicao]
 
-        AlteraTransacaoDialog(this, viewDaActivity as ViewGroup)
+        AlteraTransacaoDialog(this, viewGroupDaActivity)
             .mostrar(transacaoSelecionada, object : TransacaoDelegate {
 
                 override fun delegate(transacao: Transacao) {
