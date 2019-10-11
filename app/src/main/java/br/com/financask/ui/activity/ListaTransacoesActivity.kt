@@ -52,7 +52,11 @@ class ListaTransacoesActivity: AppCompatActivity() {
     }
 
     private fun configuraLista() {
-        lista_transacoes_listview.adapter = ListaTransacoesAdapter(listaTransacoes, this)
+        with(lista_transacoes_listview) {
+            adapter = ListaTransacoesAdapter(listaTransacoes, this@ListaTransacoesActivity)
+            setOnItemClickListener { parent, view, posicao, id ->
+            }
+        }
     }
 
     private fun configuraResumo() {
