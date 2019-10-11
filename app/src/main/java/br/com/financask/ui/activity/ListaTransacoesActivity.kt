@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_lista_transacoes.*
 
 class ListaTransacoesActivity: AppCompatActivity() {
     private val listaTransacoes: MutableList<Transacao> = mutableListOf()
+    private val viewDaActivity = window.decorView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,43 +36,52 @@ class ListaTransacoesActivity: AppCompatActivity() {
         }
     }
 
-    private fun chamaAdicionaTransacaoDialog(tipoTransacao: TipoTransacao) {
-        AdicionaTransacaoDialog(this, window.decorView as ViewGroup)
-            .mostrar(tipoTransacao, object: TransacaoDelegate {
-
-                override fun delegate(transacao: Transacao) {
-                    listaTransacoes.add(transacao)
-                    atualizaTransacoes()
-                    lista_transacoes_adiciona_menu.close(true)
-                }
-            })
-    }
-
     private fun atualizaTransacoes() {
         configuraLista()
         configuraResumo()
     }
 
     private fun configuraLista() {
-        with(lista_transacoes_listview) {
-            adapter = ListaTransacoesAdapter(listaTransacoes, this@ListaTransacoesActivity)
-            setOnItemClickListener { parent, view, posicao, id ->
-                val transacaoSelecionada = listaTransacoes[posicao]
-
-                AlteraTransacaoDialog(this@ListaTransacoesActivity, window.decorView as ViewGroup)
-                    .mostrar(transacaoSelecionada, object: TransacaoDelegate {
-
-                        override fun delegate(transacao: Transacao) {
-                            listaTransacoes[posicao] = transacao
-                            atualizaTransacoes()
-                        }
-                    })
-            }
+        lista_transacoes_listview.adapter = ListaTransacoesAdapter(listaTransacoes, this)
+        lista_transacoes_listview.setOnItemClickListener { _, _, posicao, _ ->
+            chamaAlteraTransacaoDialog(posicao)
         }
     }
 
+    private fun chamaAdicionaTransacaoDialog(tipoTransacao: TipoTransacao) {
+        AdicionaTransacaoDialog(this, viewDaActivity as ViewGroup)
+            .mostrar(tipoTransacao, object: TransacaoDelegate {
+
+                override fun delegate(transacao: Transacao) {
+                    adiciona(transacao)
+                    lista_transacoes_adiciona_menu.close(true)
+                }
+            })
+    }
+
+    private fun chamaAlteraTransacaoDialog(posicao: Int) {
+        val transacaoSelecionada = listaTransacoes[posicao]
+
+        AlteraTransacaoDialog(this, viewDaActivity as ViewGroup)
+            .mostrar(transacaoSelecionada, object : TransacaoDelegate {
+
+                override fun delegate(transacao: Transacao) {
+                    altera(transacao, posicao)
+                }
+            })
+    }
+
+    private fun adiciona(transacao: Transacao) {
+        listaTransacoes.add(transacao)
+        atualizaTransacoes()
+    }
+
+    private fun altera(transacao: Transacao, posicao: Int) {
+        listaTransacoes[posicao] = transacao
+        atualizaTransacoes()
+    }
+
     private fun configuraResumo() {
-        ResumoView(this, window.decorView, listaTransacoes)
-            .atualiza()
+        ResumoView(this, viewDaActivity, listaTransacoes).atualiza()
     }
 }
