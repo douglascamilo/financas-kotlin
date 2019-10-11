@@ -26,7 +26,17 @@ class AlteraTransacaoDialog(
     private val campoData = viewCriada.form_transacao_data
     private val campoCategoria = viewCriada.form_transacao_categoria
 
-    fun mostrar(tipoTransacao: TipoTransacao, transacaoDelegate: TransacaoDelegate) {
+    fun mostrar(transacao: Transacao, transacaoDelegate: TransacaoDelegate) {
+        val tipoTransacao = transacao.tipo
+
+        campoValor.setText(transacao.valor.toString())
+        campoData.setText(transacao.data.formataParaBrasileiro())
+
+        val categoriasCarregadas = context.resources.getStringArray(tipoTransacao.categorias)
+        val indiceCategoriaSelecionada = categoriasCarregadas.indexOf(transacao.categoria)
+        campoCategoria.setSelection(indiceCategoriaSelecionada, true)
+
+
         this.configuraCampoData()
         this.configuraCampoCategoria(tipoTransacao)
         this.configuraFormulario(tipoTransacao, transacaoDelegate)

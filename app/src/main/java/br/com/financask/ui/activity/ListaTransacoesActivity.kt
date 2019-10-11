@@ -10,7 +10,9 @@ import br.com.financask.model.Transacao
 import br.com.financask.ui.ResumoView
 import br.com.financask.ui.adapter.ListaTransacoesAdapter
 import br.com.financask.ui.dialog.AdicionaTransacaoDialog
+import br.com.financask.ui.dialog.AlteraTransacaoDialog
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
+import java.math.BigDecimal
 
 class ListaTransacoesActivity: AppCompatActivity() {
     private val listaTransacoes: MutableList<Transacao> = mutableListOf()
@@ -36,7 +38,7 @@ class ListaTransacoesActivity: AppCompatActivity() {
 
     private fun chamaAdicionaTransacaoDialog(tipoTransacao: TipoTransacao) {
         AdicionaTransacaoDialog(this, window.decorView as ViewGroup)
-            .mostrar(tipoTransacao, object : TransacaoDelegate {
+            .mostrar(tipoTransacao, object: TransacaoDelegate {
 
                 override fun delegate(transacao: Transacao) {
                     atualizaTransacoes(transacao)
@@ -55,6 +57,15 @@ class ListaTransacoesActivity: AppCompatActivity() {
         with(lista_transacoes_listview) {
             adapter = ListaTransacoesAdapter(listaTransacoes, this@ListaTransacoesActivity)
             setOnItemClickListener { parent, view, posicao, id ->
+                val transacaoSelecionada = listaTransacoes[posicao]
+
+                AlteraTransacaoDialog(this@ListaTransacoesActivity, window.decorView as ViewGroup)
+                    .mostrar(transacaoSelecionada, object: TransacaoDelegate {
+
+                        override fun delegate(transacao: Transacao) {
+                            atualizaTransacoes(transacao)
+                        }
+                    })
             }
         }
     }
