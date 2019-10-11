@@ -12,7 +12,7 @@ import java.math.BigDecimal
 
 class ResumoView(
     context: Context,
-    private val view: View,
+    private val view: View?,
     transacoes: List<Transacao>
 ) {
 
@@ -28,25 +28,34 @@ class ResumoView(
 
     private fun adicionaReceita() {
         val totalReceita = resumo.receita
-        with(view.resumo_card_receita) {
-            text = totalReceita.formataParaBrasileiro()
-            setTextColor(corReceita)
+
+        view?.let {
+            with(view.resumo_card_receita) {
+                text = totalReceita.formataParaBrasileiro()
+                setTextColor(corReceita)
+            }
         }
     }
 
     private fun adicionaDespesa() {
         val totalDespesa = resumo.despesa
-        with(view.resumo_card_despesa) {
-            text = totalDespesa.formataParaBrasileiro()
-            setTextColor(corDespesa)
+
+        view?.let {
+            with(view.resumo_card_despesa) {
+                text = totalDespesa.formataParaBrasileiro()
+                setTextColor(corDespesa)
+            }
         }
     }
 
     private fun total() {
         val total = resumo.total
-        with(view.resumo_card_total) {
-            text = total.formataParaBrasileiro()
-            setTextColor(obterCorTotal(total))
+
+        view?.let {
+            with(view.resumo_card_total) {
+                text = total.formataParaBrasileiro()
+                setTextColor(obterCorTotal(total))
+            }
         }
     }
 
