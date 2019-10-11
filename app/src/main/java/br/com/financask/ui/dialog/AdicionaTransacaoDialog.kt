@@ -23,32 +23,35 @@ class AdicionaTransacaoDialog(
 
     val viewCriada = this.criaLayout(context, viewGroup)
 
-    fun configuraDialog(transacaoDelegate: TransacaoDelegate) {
+    fun configuraDialog(tipoTransacao: TipoTransacao, transacaoDelegate: TransacaoDelegate) {
         this.configuraCampoData()
-        this.configuraCampoCategoria()
-        this.configuraFormulario(transacaoDelegate)
+        this.configuraCampoCategoria(tipoTransacao)
+        this.configuraFormulario(tipoTransacao, transacaoDelegate)
     }
 
-    private fun configuraFormulario(transacaoDelegate: TransacaoDelegate) {
+    private fun configuraFormulario(
+            tipoTransacao: TipoTransacao,
+            transacaoDelegate: TransacaoDelegate) {
+
         AlertDialog.Builder(context)
-            .setTitle(R.string.adiciona_receita)
+            .setTitle(tipoTransacao.titulo)
             .setView(viewCriada)
             .setPositiveButton("Adicionar") { _, _ ->
                 val valor = viewCriada.form_transacao_valor.text.toString().converteParaBigDecimal()
                 val data = viewCriada.form_transacao_data.text.toString().converteParaCalendar()
                 val categoria = viewCriada.form_transacao_categoria.selectedItem.toString()
 
-                val transacao = Transacao(valor, categoria, TipoTransacao.RECEITA, data)
+                val transacao = Transacao(valor, categoria, tipoTransacao, data)
                 transacaoDelegate.delegate(transacao)
             }
             .setNegativeButton("Cancelar", null)
             .show()
     }
 
-    private fun configuraCampoCategoria() {
+    private fun configuraCampoCategoria(tipoTransacao: TipoTransacao) {
         val categoriasAdapter = ArrayAdapter.createFromResource(
             context,
-            R.array.categorias_de_receita,
+            tipoTransacao.categorias,
             android.R.layout.simple_spinner_dropdown_item)
 
         viewCriada.form_transacao_categoria.adapter = categoriasAdapter
