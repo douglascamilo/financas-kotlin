@@ -29,17 +29,16 @@ class AlteraTransacaoDialog(
     fun mostrar(transacao: Transacao, transacaoDelegate: TransacaoDelegate) {
         val tipoTransacao = transacao.tipo
 
+        this.configuraCampoData(transacao.data)
+        this.configuraCampoCategoria(tipoTransacao)
+        this.configuraFormulario(tipoTransacao, transacaoDelegate)
+
         campoValor.setText(transacao.valor.toString())
         campoData.setText(transacao.data.formataParaBrasileiro())
 
         val categoriasCarregadas = context.resources.getStringArray(tipoTransacao.categorias)
         val indiceCategoriaSelecionada = categoriasCarregadas.indexOf(transacao.categoria)
         campoCategoria.setSelection(indiceCategoriaSelecionada, true)
-
-
-        this.configuraCampoData()
-        this.configuraCampoCategoria(tipoTransacao)
-        this.configuraFormulario(tipoTransacao, transacaoDelegate)
     }
 
     private fun configuraFormulario(
@@ -47,9 +46,9 @@ class AlteraTransacaoDialog(
             transacaoDelegate: TransacaoDelegate) {
 
         AlertDialog.Builder(context)
-            .setTitle(tipoTransacao.titulo)
+            .setTitle(tipoTransacao.tituloAlteracao)
             .setView(viewCriada)
-            .setPositiveButton("Adicionar") { _, _ ->
+            .setPositiveButton("Alterar") { _, _ ->
                 val valor = campoValor.text.toString().converteParaBigDecimal()
                 val data = campoData.text.toString().converteParaCalendar()
                 val categoria = campoCategoria.selectedItem.toString()
@@ -70,13 +69,12 @@ class AlteraTransacaoDialog(
         campoCategoria.adapter = categoriasAdapter
     }
 
-    private fun configuraCampoData() {
-        val hoje = Calendar.getInstance()
-        val ano = hoje.get(Calendar.YEAR)
-        val mes = hoje.get(Calendar.MONTH)
-        val dia = hoje.get(Calendar.DAY_OF_MONTH)
+    private fun configuraCampoData(data: Calendar) {
+        val ano = data.get(Calendar.YEAR)
+        val mes = data.get(Calendar.MONTH)
+        val dia = data.get(Calendar.DAY_OF_MONTH)
 
-        campoData.setText(hoje.formataParaBrasileiro())
+        campoData.setText(data.formataParaBrasileiro())
         campoData.setOnClickListener {
             DatePickerDialog(
                 context,

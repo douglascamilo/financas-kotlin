@@ -12,7 +12,6 @@ import br.com.financask.ui.adapter.ListaTransacoesAdapter
 import br.com.financask.ui.dialog.AdicionaTransacaoDialog
 import br.com.financask.ui.dialog.AlteraTransacaoDialog
 import kotlinx.android.synthetic.main.activity_lista_transacoes.*
-import java.math.BigDecimal
 
 class ListaTransacoesActivity: AppCompatActivity() {
     private val listaTransacoes: MutableList<Transacao> = mutableListOf()
@@ -41,14 +40,14 @@ class ListaTransacoesActivity: AppCompatActivity() {
             .mostrar(tipoTransacao, object: TransacaoDelegate {
 
                 override fun delegate(transacao: Transacao) {
-                    atualizaTransacoes(transacao)
+                    listaTransacoes.add(transacao)
+                    atualizaTransacoes()
                     lista_transacoes_adiciona_menu.close(true)
                 }
             })
     }
 
-    private fun atualizaTransacoes(transacao: Transacao) {
-        listaTransacoes.add(transacao)
+    private fun atualizaTransacoes() {
         configuraLista()
         configuraResumo()
     }
@@ -63,7 +62,8 @@ class ListaTransacoesActivity: AppCompatActivity() {
                     .mostrar(transacaoSelecionada, object: TransacaoDelegate {
 
                         override fun delegate(transacao: Transacao) {
-                            atualizaTransacoes(transacao)
+                            listaTransacoes[posicao] = transacao
+                            atualizaTransacoes()
                         }
                     })
             }

@@ -37,7 +37,7 @@ class AdicionaTransacaoDialog(
             transacaoDelegate: TransacaoDelegate) {
 
         AlertDialog.Builder(context)
-            .setTitle(tipoTransacao.titulo)
+            .setTitle(tipoTransacao.tituloInclusao)
             .setView(viewCriada)
             .setPositiveButton("Adicionar") { _, _ ->
                 val valor = campoValor.text.toString().converteParaBigDecimal()
