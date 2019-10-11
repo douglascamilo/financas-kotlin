@@ -17,32 +17,32 @@ class ListaTransacoesActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.activity_lista_transacoes)
+        setContentView(R.layout.activity_lista_transacoes)
 
-        this.configuraResumo()
-        this.configuraLista()
+        configuraResumo()
+        configuraLista()
+        configuraFAB()
+    }
 
+    private fun configuraFAB() {
         lista_transacoes_adiciona_receita.setOnClickListener {
-            AdicionaTransacaoDialog(this, window.decorView as ViewGroup)
-                .configuraDialog(TipoTransacao.RECEITA, object : TransacaoDelegate {
-
-                    override fun delegate(transacao: Transacao) {
-                        atualizaTransacoes(transacao)
-                        lista_transacoes_adiciona_menu.close(true)
-                    }
-                })
+            chamaAdicionaTransacaoDialog(TipoTransacao.RECEITA)
         }
 
         lista_transacoes_adiciona_despesa.setOnClickListener {
-            AdicionaTransacaoDialog(this, window.decorView as ViewGroup)
-                .configuraDialog(TipoTransacao.DESPESA, object : TransacaoDelegate {
-
-                    override fun delegate(transacao: Transacao) {
-                        atualizaTransacoes(transacao)
-                        lista_transacoes_adiciona_menu.close(true)
-                    }
-                })
+            chamaAdicionaTransacaoDialog(TipoTransacao.DESPESA)
         }
+    }
+
+    private fun chamaAdicionaTransacaoDialog(tipoTransacao: TipoTransacao) {
+        AdicionaTransacaoDialog(this, window.decorView as ViewGroup)
+            .mostrar(tipoTransacao, object : TransacaoDelegate {
+
+                override fun delegate(transacao: Transacao) {
+                    atualizaTransacoes(transacao)
+                    lista_transacoes_adiciona_menu.close(true)
+                }
+            })
     }
 
     private fun atualizaTransacoes(transacao: Transacao) {

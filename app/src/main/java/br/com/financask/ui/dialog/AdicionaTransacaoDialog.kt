@@ -21,9 +21,12 @@ class AdicionaTransacaoDialog(
     private val context: Context,
     viewGroup: ViewGroup) {
 
-    val viewCriada = this.criaLayout(context, viewGroup)
+    private val viewCriada = this.criaLayout(context, viewGroup)
+    private val campoValor = viewCriada.form_transacao_valor
+    private val campoData = viewCriada.form_transacao_data
+    private val campoCategoria = viewCriada.form_transacao_categoria
 
-    fun configuraDialog(tipoTransacao: TipoTransacao, transacaoDelegate: TransacaoDelegate) {
+    fun mostrar(tipoTransacao: TipoTransacao, transacaoDelegate: TransacaoDelegate) {
         this.configuraCampoData()
         this.configuraCampoCategoria(tipoTransacao)
         this.configuraFormulario(tipoTransacao, transacaoDelegate)
@@ -37,9 +40,9 @@ class AdicionaTransacaoDialog(
             .setTitle(tipoTransacao.titulo)
             .setView(viewCriada)
             .setPositiveButton("Adicionar") { _, _ ->
-                val valor = viewCriada.form_transacao_valor.text.toString().converteParaBigDecimal()
-                val data = viewCriada.form_transacao_data.text.toString().converteParaCalendar()
-                val categoria = viewCriada.form_transacao_categoria.selectedItem.toString()
+                val valor = campoValor.text.toString().converteParaBigDecimal()
+                val data = campoData.text.toString().converteParaCalendar()
+                val categoria = campoCategoria.selectedItem.toString()
 
                 val transacao = Transacao(valor, categoria, tipoTransacao, data)
                 transacaoDelegate.delegate(transacao)
@@ -54,7 +57,7 @@ class AdicionaTransacaoDialog(
             tipoTransacao.categorias,
             android.R.layout.simple_spinner_dropdown_item)
 
-        viewCriada.form_transacao_categoria.adapter = categoriasAdapter
+        campoCategoria.adapter = categoriasAdapter
     }
 
     private fun configuraCampoData() {
@@ -63,15 +66,15 @@ class AdicionaTransacaoDialog(
         val mes = hoje.get(Calendar.MONTH)
         val dia = hoje.get(Calendar.DAY_OF_MONTH)
 
-        viewCriada.form_transacao_data.setText(hoje.formataParaBrasileiro())
-        viewCriada.form_transacao_data.setOnClickListener {
+        campoData.setText(hoje.formataParaBrasileiro())
+        campoData.setOnClickListener {
             DatePickerDialog(
                 context,
                 { _, ano, mes, dia ->
                     val dataSelecionada = Calendar.getInstance()
                     dataSelecionada.set(ano, mes, dia)
 
-                    viewCriada.form_transacao_data.setText(dataSelecionada.formataParaBrasileiro())
+                    campoData.setText(dataSelecionada.formataParaBrasileiro())
                 },
                 ano, mes, dia
             ).show()

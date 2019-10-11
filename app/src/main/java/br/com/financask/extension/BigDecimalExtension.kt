@@ -2,7 +2,7 @@ package br.com.financask.extension
 
 import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.util.Locale
+import java.util.*
 
 fun BigDecimal.formataParaBrasileiro(): String {
     return DecimalFormat.getCurrencyInstance(Locale("pt", "BR"))
