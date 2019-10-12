@@ -2,7 +2,6 @@ package br.com.financask.ui.dialog
 
 import android.content.Context
 import android.view.ViewGroup
-import br.com.financask.delegate.TransacaoDelegate
 import br.com.financask.extension.formataParaBrasileiro
 import br.com.financask.model.TipoTransacao
 import br.com.financask.model.Transacao
@@ -13,8 +12,8 @@ class AlteraTransacaoDialog(
 
     override val textoBotaoConfirmacao: String get() = "Alterar"
 
-    fun mostrar(transacao: Transacao, transacaoDelegate: TransacaoDelegate) {
-        super.mostrar(transacao.tipo, transacaoDelegate)
+    fun mostrar(transacao: Transacao, delegate: (transacao: Transacao) -> Unit) {
+        super.mostrar(transacao.tipo, delegate)
         inicializaCampos(transacao)
     }
 

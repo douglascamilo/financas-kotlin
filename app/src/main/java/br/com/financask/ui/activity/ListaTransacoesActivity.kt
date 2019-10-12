@@ -1,11 +1,9 @@
 package br.com.financask.ui.activity
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import br.com.financask.R
-import br.com.financask.delegate.TransacaoDelegate
 import br.com.financask.model.TipoTransacao
 import br.com.financask.model.Transacao
 import br.com.financask.ui.ResumoView
@@ -56,12 +54,9 @@ class ListaTransacoesActivity: AppCompatActivity() {
 
     private fun chamaAdicionaTransacaoDialog(tipoTransacao: TipoTransacao) {
         AdicionaTransacaoDialog(this, viewGroupDaActivity)
-            .mostrar(tipoTransacao, object: TransacaoDelegate {
-
-                override fun delegate(transacao: Transacao) {
-                    adiciona(transacao)
-                    lista_transacoes_adiciona_menu.close(true)
-                }
+            .mostrar(tipoTransacao, delegate = { transacaoAdicionada ->
+                adiciona(transacaoAdicionada)
+                lista_transacoes_adiciona_menu.close(true)
             })
     }
 
@@ -69,12 +64,9 @@ class ListaTransacoesActivity: AppCompatActivity() {
         val transacaoSelecionada = listaTransacoes[posicao]
 
         AlteraTransacaoDialog(this, viewGroupDaActivity)
-            .mostrar(transacaoSelecionada, object : TransacaoDelegate {
-
-                override fun delegate(transacao: Transacao) {
-                    altera(transacao, posicao)
-                }
-            })
+            .mostrar(transacaoSelecionada) { transacaoAlterada ->
+                altera(transacaoAlterada, posicao)
+            }
     }
 
     private fun adiciona(transacao: Transacao) {

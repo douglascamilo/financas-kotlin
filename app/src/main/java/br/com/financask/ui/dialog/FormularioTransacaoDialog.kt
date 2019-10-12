@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import br.com.financask.R
-import br.com.financask.delegate.TransacaoDelegate
 import br.com.financask.extension.converteParaBigDecimal
 import br.com.financask.extension.converteParaCalendar
 import br.com.financask.extension.formataParaBrasileiro
@@ -27,16 +26,18 @@ abstract class FormularioTransacaoDialog(
     protected val campoCategoria = viewCriada.form_transacao_categoria
     protected abstract val textoBotaoConfirmacao: String
 
-    fun mostrar(tipoTransacao: TipoTransacao, transacaoDelegate: TransacaoDelegate) {
+    fun mostrar(
+        tipoTransacao: TipoTransacao,
+        delegate: (transacao: Transacao) -> Unit) {
+
         this.configuraCampoData()
         this.configuraCampoCategoria(tipoTransacao)
-        this.configuraFormulario(tipoTransacao, transacaoDelegate)
+        this.configuraFormulario(tipoTransacao, delegate)
     }
 
     private fun configuraFormulario(
         tipoTransacao: TipoTransacao,
-        transacaoDelegate: TransacaoDelegate
-    ) {
+        delegate: (transacao: Transacao) -> Unit) {
 
         AlertDialog.Builder(context)
             .setTitle(this.getIdTitulo(tipoTransacao))
@@ -47,7 +48,7 @@ abstract class FormularioTransacaoDialog(
                 val categoria = campoCategoria.selectedItem.toString()
 
                 val transacao = Transacao(valor, categoria, tipoTransacao, data)
-                transacaoDelegate.delegate(transacao)
+                delegate(transacao)
             }
             .setNegativeButton("Cancelar", null)
             .show()
