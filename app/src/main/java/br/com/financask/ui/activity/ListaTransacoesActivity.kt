@@ -1,7 +1,10 @@
 package br.com.financask.ui.activity
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import br.com.financask.R
 import br.com.financask.model.TipoTransacao
@@ -46,10 +49,33 @@ class ListaTransacoesActivity: AppCompatActivity() {
     }
 
     private fun configuraLista() {
-        lista_transacoes_listview.adapter = ListaTransacoesAdapter(listaTransacoes, this)
-        lista_transacoes_listview.setOnItemClickListener { _, _, posicao, _ ->
-            chamaAlteraTransacaoDialog(posicao)
+        with(lista_transacoes_listview) {
+            adapter = ListaTransacoesAdapter(listaTransacoes, this@ListaTransacoesActivity)
+
+            setOnItemClickListener { _, _, posicao, _ ->
+                chamaAlteraTransacaoDialog(posicao)
+            }
+
+            setOnCreateContextMenuListener { menu, _, _ ->
+                menu.add(Menu.NONE, 1, Menu.NONE, "Remover")
+            }
         }
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == 1) {
+            val adapterMenuInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
+            val posicao = adapterMenuInfo.position
+
+            remove(posicao)
+        }
+
+        return super.onContextItemSelected(item)
+    }
+
+    private fun remove(posicao: Int) {
+        listaTransacoes.removeAt(posicao)
+        atualizaTransacoes()
     }
 
     private fun chamaAdicionaTransacaoDialog(tipoTransacao: TipoTransacao) {
